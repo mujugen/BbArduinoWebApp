@@ -5,6 +5,7 @@ export default function Home() {
   const [currentUserId, setcurrentUserId] = useState(0);
   const [userFullname, setuserFullname] = useState("");
   const [userFingerprint, setuserFingerprint] = useState("");
+  const [arduinoState, setarduinoState] = useState("Waiting");
 
   async function enrollRequest() {
     console.log("enrollRequest");
@@ -343,6 +344,19 @@ export default function Home() {
           >
             Delete
           </button>
+        </div>
+        <div className="flex flex-col justify-items-center text-center">
+          <div className="mb-2 mt-4">
+            <label
+              htmlFor="userId"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              State:
+            </label>
+            <div id="userId" className="mt-1 p-2 w-full">
+              {arduinoState}
+            </div>
+          </div>
         </div>
       </div>
     </div>
