@@ -7,7 +7,21 @@ export default function Home() {
   const [userFingerprint, setuserFingerprint] = useState("");
   const [arduinoState, setarduinoState] = useState("Waiting");
 
+  const socket = new WebSocket("ws://192.168.254.102:81/");
+
+  socket.addEventListener("open", (event) => {
+    console.log("Connected to WS server");
+  });
+
+  socket.addEventListener("message", (event) => {
+    console.log("Message from server: ", event.data);
+    setarduinoState(event.data);
+  });
+
   async function enrollRequest() {
+    const emailInput = document.getElementById("email");
+    const email = emailInput.value;
+
     console.log("enrollRequest");
     if (currentUserId == 0) {
       alert("Log in first");
@@ -15,7 +29,14 @@ export default function Home() {
     }
     try {
       const response = await fetch(
-        "http://localhost:3000/api/arduino/enrollAPI"
+        "http://localhost:3000/api/arduino/enrollAPI",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
       );
       if (!response.ok) {
         throw new Error("Something went wrong");
