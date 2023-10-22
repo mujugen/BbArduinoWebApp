@@ -8,6 +8,10 @@ export default function Home() {
 
   async function enrollRequest() {
     console.log("enrollRequest");
+    if (currentUserId == 0) {
+      alert("Log in first");
+      return;
+    }
     try {
       const response = await fetch(
         "http://localhost:3000/api/arduino/enrollAPI"
@@ -23,6 +27,10 @@ export default function Home() {
   }
   async function verifyRequest() {
     console.log("verifyRequest");
+    if (currentUserId == 0) {
+      alert("Log in first");
+      return;
+    }
     try {
       const response = await fetch(
         "http://localhost:3000/api/arduino/verifyAPI"
@@ -38,6 +46,10 @@ export default function Home() {
   }
   async function deleteRequest() {
     console.log("deleteRequest");
+    if (currentUserId == 0) {
+      alert("Log in first");
+      return;
+    }
     try {
       const response = await fetch(
         "http://localhost:3000/api/arduino/deleteAPI"
@@ -96,6 +108,10 @@ export default function Home() {
     const lastNameInput = document.getElementById("lastName");
     const birthdayInput = document.getElementById("birthday");
 
+    if (!birthdayInput.value) {
+      alert("Please enter your birthday");
+      return;
+    }
     // Access the values of the input fields
     const email = emailInput.value;
     const password = passwordInput.value;
