@@ -2,6 +2,9 @@ import React, { useState } from "react";
 
 export default function Home() {
   const [showRegisterForm, setShowRegisterForm] = useState(true);
+  const [currentUserId, setcurrentUserId] = useState(0);
+  const [userFullname, setuserFullname] = useState("");
+  const [userFingerprint, setuserFingerprint] = useState("");
 
   async function enrollRequest() {
     console.log("enrollRequest");
@@ -60,6 +63,26 @@ export default function Home() {
     // Log the values to the console
     console.log("Email:", email);
     console.log("Password:", password);
+
+    try {
+      const response = await fetch("http://localhost:3000/api/db/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!response.ok) {
+        alert("Wrong credentials");
+        throw new Error("Something went wrong");
+      }
+      alert("Success");
+      const data = await response.json();
+      console.log(data);
+      setcurrentUserId(data.response.id);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
 
   function register() {
@@ -78,14 +101,38 @@ export default function Home() {
     const password = passwordInput.value;
     const firstName = firstNameInput.value;
     const lastName = lastNameInput.value;
-    const birthday = birthdayInput.value;
+    const birthday = new Date(birthdayInput.value).toISOString().split("T")[0];
 
-    // Log the values to the console
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
-    console.log("Birthday:", birthday);
+    // Create an object with the data you want to send
+    const dataToSend = {
+      email: email,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+      birthday: birthday,
+    };
+
+    try {
+      const response = await fetch("http://localhost:3000/api/db/register", {
+        method: "POST", // This is a POST request
+        headers: {
+          "Content-Type": "application/json", // Specify that you are sending JSON data
+        },
+        body: JSON.stringify(dataToSend), // Convert the data to JSON and send it in the body
+      });
+
+      if (!response.ok) {
+        alert("Something went wrong");
+        throw new Error("Something went wrong");
+      }
+      alert("Success");
+      const data = await response.json();
+      console.log(data);
+      setcurrentUserId(data.id);
+      setShowRegisterForm(!showRegisterForm);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
 
   return (
@@ -226,56 +273,60 @@ export default function Home() {
         )}
       </div>
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <div className="mb-4">
-          <label
-            htmlFor="userId"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Current User:
-          </label>
-          <input
-            type="text"
-            id="userId"
-            name="userId"
-            className="mt-1 p-2 w-full border rounded-md"
-            disabled
-          />
+        <div className="flex flex-col justify-items-center text-center">
+          <div className="mb-2">
+            <label
+              htmlFor="userId"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Current User:
+            </label>
+            <div id="userId" className="mt-1 p-2 w-full">
+              {currentUserId}
+            </div>
+          </div>
+          <div className="mb-2">
+            <label
+              htmlFor="userId"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Full Name:
+            </label>
+            <div id="userId" className="mt-1 p-2 w-full">
+              {userFullname}
+            </div>
+          </div>
+          <div className="mb-2">
+            <label
+              htmlFor="userId"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Fingerprint:
+            </label>
+            <div id="userId" className="mt-1 p-2 w-full">
+              {userFingerprint}
+            </div>
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-4">
           <button
-            className="bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+            className="bg-indigo-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
             onClick={enrollRequest}
           >
-            Enroll Fingerprint
+            Enroll
           </button>
           <button
-            className="bg-green-500 hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+            className="bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
             onClick={verifyRequest}
           >
-            Verify Fingerprint
+            Verify
           </button>
           <button
-            className="bg-red-500 hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+            className="bg-blue-500 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
             onClick={deleteRequest}
           >
-            Delete Fingerprint
+            Delete
           </button>
-        </div>
-
-        <div className="mt-6">
-          <label
-            htmlFor="logs"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Logs:
-          </label>
-          <textarea
-            id="logs"
-            name="logs"
-            rows="4"
-            className="mt-1 p-2 w-full border rounded-md"
-            disabled
-          ></textarea>
         </div>
       </div>
     </div>
