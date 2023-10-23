@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function handler(req, res) {
   try {
-    const url = "http://192.168.254.102:80/api/deleteAPI";
+    const url = `http://${process.env.ARDUINO_IP}:80/api/deleteAPI`;
 
     const response = await axios.get(url);
 

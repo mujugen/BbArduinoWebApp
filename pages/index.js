@@ -7,7 +7,7 @@ export default function Home() {
   const [userFingerprint, setuserFingerprint] = useState("");
   const [arduinoState, setarduinoState] = useState("Waiting");
 
-  const socket = new WebSocket("ws://192.168.254.102:81/");
+  const socket = new WebSocket(`ws://${process.env.ARDUINO_IP}:81/`);
 
   socket.addEventListener("open", (event) => {
     console.log("Connected to WS server");
@@ -48,6 +48,9 @@ export default function Home() {
     }
   }
   async function verifyRequest() {
+    const emailInput = document.getElementById("email");
+    const email = emailInput.value;
+
     console.log("verifyRequest");
     if (currentUserId == 0) {
       alert("Log in first");
@@ -55,7 +58,14 @@ export default function Home() {
     }
     try {
       const response = await fetch(
-        "http://localhost:3000/api/arduino/verifyAPI"
+        "http://localhost:3000/api/arduino/verifyAPI",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
       );
       if (!response.ok) {
         throw new Error("Something went wrong");
