@@ -7,18 +7,23 @@ export default function Home() {
   const [userFingerprint, setuserFingerprint] = useState("");
   const [arduinoState, setarduinoState] = useState("Waiting");
 
-  const socket = new WebSocket(`ws://${process.env.ARDUINO_IP}:81/`);
+  function createWebSocket() {
+    const socket = new WebSocket(
+      `ws://${process.env.NEXT_PUBLIC_ARDUINO_IP}:81/`
+    );
 
-  socket.addEventListener("open", (event) => {
-    console.log("Connected to WS server");
-  });
+    socket.addEventListener("open", (event) => {
+      console.log("Connected to WS server");
+    });
 
-  socket.addEventListener("message", (event) => {
-    console.log("Message from server: ", event.data);
-    setarduinoState(event.data);
-  });
+    socket.addEventListener("message", (event) => {
+      console.log("Message from server: ", event.data);
+      setarduinoState(event.data);
+    });
+  }
 
   async function enrollRequest() {
+    createWebSocket();
     const emailInput = document.getElementById("email");
     const email = emailInput.value;
 
@@ -48,9 +53,11 @@ export default function Home() {
     }
   }
   async function verifyRequest() {
+    createWebSocket();
     const emailInput = document.getElementById("email");
     const email = emailInput.value;
 
+    setarduinoState("Sending request");
     console.log("verifyRequest");
     if (currentUserId == 0) {
       alert("Log in first");
@@ -71,26 +78,8 @@ export default function Home() {
         throw new Error("Something went wrong");
       }
       const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-  async function deleteRequest() {
-    console.log("deleteRequest");
-    if (currentUserId == 0) {
-      alert("Log in first");
-      return;
-    }
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/arduino/deleteAPI"
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-      const data = await response.json();
-      console.log(data);
+      console.log(data.data);
+      setarduinoState(data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -124,6 +113,8 @@ export default function Home() {
       const data = await response.json();
       console.log(data);
       setcurrentUserId(data.response.id);
+      setuserFullname(`${data.response.first_name} ${data.response.last_name}`);
+      setuserFingerprint(data.response.fingerprint);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -351,12 +342,12 @@ export default function Home() {
             >
               Fingerprint:
             </label>
-            <div id="userId" className="mt-1 p-2 w-full">
+            <div id="userId" className="mt-1 p-2 w-full overflow-hidden">
               {userFingerprint}
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <button
             className="bg-indigo-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
             onClick={enrollRequest}
@@ -368,12 +359,6 @@ export default function Home() {
             onClick={verifyRequest}
           >
             Verify
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
-            onClick={deleteRequest}
-          >
-            Delete
           </button>
         </div>
         <div className="flex flex-col justify-items-center text-center">
