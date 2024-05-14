@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const { email } = req.body;
   console.log("verifyAPI");
   try {
-    const url = `http://${process.env.ARDUINO_IP}:80/api/verifyAPI`;
+    const url = `http://192.168.254.109:80/api/verifyAPI`;
 
     const user = await prisma.users.findFirst({
       where: {

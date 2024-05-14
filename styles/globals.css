@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "IBMPlexSerif-Medium";
+  src: url("../fonts/IBMPlexSerif-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/Inter-VariableFont_slnt,wght.ttf") format("truetype");
+}
+
+.ibm-plex-serif-medium {
+  font-family: "IBMPlexSerif-Medium";
+}
+.inter {
+  font-family: "Inter";
+}
+
+body {
+  font-family: "Inter";
+}
+
+.font-blue {
+  color: rgb(0 33 79);
+}

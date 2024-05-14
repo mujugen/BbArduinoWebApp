@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
 
 export default function Home() {
@@ -175,204 +176,161 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-500 flex flex-col items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96 mb-5 flex flex-col">
-        {showRegisterForm ? (
-          <>
-            <div className="mb-4">
-              <label
-                htmlFor="userId"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Email:
-              </label>
-              <input
-                type="text"
-                id="email"
-                name="userId"
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="userId"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Password:
-              </label>
-              <input
-                type="text"
-                id="password"
-                name="userId"
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div>
-            <div className="flex flex-col w-full space-y-3 mt-4 items-center">
-              <button
-                className="w-full bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
-                onClick={login}
-              >
-                Login
-              </button>
-              <button
-                className="w-1/2 bg-green-500 hover:bg-green-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
-                onClick={register}
-              >
-                Register
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="mb-4">
-              <label
-                htmlFor="userId"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Email:
-              </label>
-              <input
-                type="text"
-                id="email"
-                name="userId"
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="userId"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Password:
-              </label>
-              <input
-                type="text"
-                id="password"
-                name="userId"
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="firstName"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                First Name:
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Last Name:
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="birthday"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Birthday:
-              </label>
-              <input
-                type="date"
-                id="birthday"
-                name="birthday"
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div>
-            <div className="flex flex-col w-full space-y-3 mt-4 items-center">
-              <button
-                className="w-full bg-green-500 hover:bg-green-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
-                onClick={confirmRegister}
-              >
-                Confirm
-              </button>
-              <button
-                className="w-1/2 bg-gray-400 hover:bg-gray-800 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
-                onClick={register}
-              >
-                Back
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <div className="flex flex-col justify-items-center text-center">
-          <div className="mb-2">
-            <label
-              htmlFor="userId"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Current User:
-            </label>
-            <div id="userId" className="mt-1 p-2 w-full">
-              {currentUserId}
-            </div>
-          </div>
-          <div className="mb-2">
-            <label
-              htmlFor="userId"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Full Name:
-            </label>
-            <div id="userId" className="mt-1 p-2 w-full">
-              {userFullname}
-            </div>
-          </div>
-          <div className="mb-2">
-            <label
-              htmlFor="userId"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Fingerprint:
-            </label>
-            <div id="userId" className="mt-1 p-2 w-full overflow-hidden">
-              {userFingerprint}
-            </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            className="bg-indigo-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
-            onClick={enrollRequest}
-          >
-            Enroll
-          </button>
-          <button
-            className="bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
-            onClick={verifyRequest}
-          >
-            Verify
-          </button>
-        </div>
-        <div className="flex flex-col justify-items-center text-center">
-          <div className="mb-2 mt-4">
-            <label
-              htmlFor="userId"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              State:
-            </label>
-            <div id="userId" className="mt-1 p-2 w-full">
-              {arduinoState}
-            </div>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-500 flex flex-col">
+      <div className="flex bg-white p-8 w-1/2 h-full fixed items-center justify-center">
+        <div className="bg-white p-8 rounded-lg  w-3/5 mb-5 flex flex-col">
+          {showRegisterForm ? (
+            <>
+              <div className="mb-4">
+                <div className="mb-10">
+                  <h1 className="ibm-plex-serif-medium text-2xl mb-9 font-semibold font-blue">
+                    Sentria
+                  </h1>
+                  <h2 className="text-4xl font-semibold mb-3">Sign In</h2>
+                  <h3>Please enter your details</h3>
+                </div>
+                <label
+                  htmlFor="userId"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Email
+                </label>
+                <input
+                  type="text"
+                  id="email"
+                  name="userId"
+                  placeholder="Enter your email"
+                  className="mt-1 p-2 w-full border rounded-md"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="userId"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Password
+                </label>
+                <input
+                  type="text"
+                  id="password"
+                  name="userId"
+                  placeholder="Enter your password"
+                  className="mt-1 p-2 w-full border rounded-md"
+                />
+              </div>
+              <div className="flex flex-col w-full space-y-3 mt-4 items-center">
+                <button
+                  className="w-full bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                  onClick={login}
+                >
+                  Sign in
+                </button>
+                <div className="inline-block">
+                  <h3 className="inline">Don't have an account?</h3>
+                  <button
+                    className="font-semibold rounded-lg p-2 transition-transform transform hover:scale-105"
+                    onClick={register}
+                  >
+                    Sign up
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="mb-4">
+                <div className="flex space-x-10">
+                  <div className="mb-4">
+                    <label
+                      htmlFor="firstName"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      First Name:
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      placeholder="Enter your first name"
+                      className="mt-1 p-2 w-full border rounded-md"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label
+                      htmlFor="lastName"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Last Name:
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      placeholder="Enter your last name"
+                      className="mt-1 p-2 w-full border rounded-md"
+                    />
+                  </div>
+                </div>
+                <label
+                  htmlFor="userId"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Email:
+                </label>
+                <input
+                  type="text"
+                  id="email"
+                  name="userId"
+                  placeholder="Enter your email"
+                  className="mt-1 p-2 w-full border rounded-md"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="userId"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Password:
+                </label>
+                <input
+                  type="text"
+                  id="password"
+                  name="userId"
+                  placeholder="Enter your password"
+                  className="mt-1 p-2 w-full border rounded-md"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="birthday"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Birthday:
+                </label>
+                <input
+                  type="date"
+                  id="birthday"
+                  name="birthday"
+                  className="mt-1 p-2 w-full border rounded-md"
+                />
+              </div>
+              <div className="flex flex-col w-full space-y-3 mt-4 items-center">
+                <button
+                  className="w-full bg-green-500 hover:bg-green-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                  onClick={confirmRegister}
+                >
+                  Confirm
+                </button>
+                <button
+                  className="w-1/2 bg-gray-400 hover:bg-gray-800 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                  onClick={register}
+                >
+                  Back
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
