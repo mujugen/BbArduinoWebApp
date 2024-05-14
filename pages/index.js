@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const [showRegisterForm, setShowRegisterForm] = useState(true);
@@ -7,6 +8,7 @@ export default function Home() {
   const [userFullname, setuserFullname] = useState("");
   const [userFingerprint, setuserFingerprint] = useState("");
   const [arduinoState, setarduinoState] = useState("Waiting");
+  const router = useRouter();
 
   function createWebSocket() {
     const socket = new WebSocket(
@@ -110,12 +112,11 @@ export default function Home() {
         alert("Wrong credentials");
         throw new Error("Something went wrong");
       }
-      alert("Success");
       const data = await response.json();
-      console.log(data);
-      setcurrentUserId(data.response.id);
-      setuserFullname(`${data.response.first_name} ${data.response.last_name}`);
-      setuserFingerprint(data.response.fingerprint);
+      router.push({
+        pathname: "/home",
+        query: { data: btoa(JSON.stringify(data.response)) },
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -196,7 +197,7 @@ export default function Home() {
                   Email
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   id="email"
                   name="userId"
                   placeholder="Enter your email"
@@ -211,7 +212,7 @@ export default function Home() {
                   Password
                 </label>
                 <input
-                  type="text"
+                  type="password"
                   id="password"
                   name="userId"
                   placeholder="Enter your password"
