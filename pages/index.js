@@ -8,6 +8,7 @@ export default function Home() {
   const [userFullname, setuserFullname] = useState("");
   const [userFingerprint, setuserFingerprint] = useState("");
   const [arduinoState, setarduinoState] = useState("Waiting");
+  const [modalToggle, setModalToggle] = useState(false);
   const router = useRouter();
 
   function createWebSocket() {
@@ -25,7 +26,6 @@ export default function Home() {
     });
   }
 
-  
   async function verifyRequest() {
     createWebSocket();
     const emailInput = document.getElementById("email");
@@ -88,6 +88,39 @@ export default function Home() {
         pathname: "/home",
         query: { data: btoa(JSON.stringify(data.response)) },
       });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  async function fingerprintLogin() {
+    setModalToggle(true);
+    const emailInput = document.getElementById("email");
+    const email = emailInput.value;
+
+    setarduinoState("Sending request");
+    console.log("verifyRequest");
+    if (currentUserId == 0) {
+      alert("Log in first");
+      return;
+    }
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/arduino/verifyAPI",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+      const data = await response.json();
+      console.log(data.data);
+      setarduinoState(data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -197,6 +230,12 @@ export default function Home() {
                 >
                   Sign in
                 </button>
+                <button
+                  className="w-full bg-green-500 hover:bg-green-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                  onClick={fingerprintLogin}
+                >
+                  Sign in with Fingerprint
+                </button>
                 <div className="inline-block">
                   <h3 className="inline">Don't have an account?</h3>
                   <button
@@ -303,6 +342,58 @@ export default function Home() {
               </div>
             </>
           )}
+        </div>
+      </div>
+      <div
+        id="fingerprint-modal"
+        tabIndex={-1}
+        className={`fixed top-0 z-50 w-full overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center bg-gray-400 bg-opacity-50 transition-opacity duration-300 ${
+          modalToggle ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+      >
+        <div className="relative w-full max-w-lg max-h-full">
+          {/* Modal content */}
+          <div className="relative bg-white rounded-lg shadow dark:bg-white-700 pb-10">
+            {/* Modal header */}
+            <div className="flex items-center justify-between p-4  rounded-t">
+              <button
+                type="button"
+                className="text-white-400 bg-transparent hover:bg-white-200 hover:text-white-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-white-600 dark:hover:text-white"
+                data-modal-hide="medium-modal"
+                onClick={() => {
+                  setModalToggle(false);
+                }}
+              >
+                <svg
+                  className="w-3 h-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                  />
+                </svg>
+              </button>
+            </div>
+            {/* Modal body */}
+            <div className="p-10 md:p-5 space-y-2">
+              <h4 className="text-2xl text-center font-semibold leading-relaxed text-gray-800 px-8">
+                Please put your thumb on the scanner
+              </h4>
+              <h5 className="text-lg text-center  leading-relaxed text-gray-500 px-8 pt-10">
+                Status:
+              </h5>
+              <h3 className="text-lg text-center font-semibold leading-relaxed text-gray-800 px-8">
+                {status ? status : "Waiting"}
+              </h3>
+            </div>
+          </div>
         </div>
       </div>
     </div>
