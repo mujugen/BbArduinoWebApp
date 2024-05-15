@@ -6,8 +6,7 @@ import Navbar from "./components/navbar";
 export default function Settings() {
   const router = useRouter();
   const [data, setData] = useState(null);
-  const [language, setLanguage] = useState("English");
-  const [timezone, setTimezone] = useState("(GMT+08:00) Philippines");
+  const [buttonState, setButtonState] = useState("Edit");
 
   useEffect(() => {
     if (router.query.data) {
@@ -15,6 +14,10 @@ export default function Settings() {
       console.log(JSON.parse(atob(router.query.data)));
     }
   }, [router.query.data]);
+
+  function edit() {
+    setButtonState((prevText) => (prevText === "Edit" ? "Save" : "Edit"));
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br bg-gray-200 flex flex-col">
@@ -81,7 +84,7 @@ export default function Settings() {
               placeholder="Enter your address"
               className="mt-1 p-2 w-full border rounded-md"
             />
-            <div className="flex">
+            <div className="flex justify-between">
               <div>
                 <h4 className="text-gray-600 mb-3 mt-3">City</h4>
                 <input
@@ -93,7 +96,7 @@ export default function Settings() {
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
-              <div className="ml-auto">
+              <div>
                 <h4 className="text-gray-600 mb-3 mt-3">Province</h4>
                 <input
                   disabled
@@ -105,7 +108,7 @@ export default function Settings() {
                 />
               </div>
             </div>
-            <div className="flex">
+            <div className="flex justify-between">
               <div>
                 <h4 className="text-gray-600 mb-3 mt-3">Postal Code</h4>
                 <input
@@ -117,7 +120,7 @@ export default function Settings() {
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
-              <div className="ml-auto">
+              <div>
                 <h4 className="text-gray-600 mb-3 mt-3">SSN</h4>
                 <input
                   disabled
@@ -129,6 +132,24 @@ export default function Settings() {
                 />
               </div>
             </div>
+            <h4 className="text-gray-600 mb-3 mt-3">Job</h4>
+            <input
+              disabled
+              type="text"
+              id="firstName"
+              name="firstName"
+              placeholder="Ex. Accountant"
+              className="mt-1 p-2 w-full border rounded-md"
+            />
+            <h4 className="text-gray-600 mb-3 mt-3">Monthly Income</h4>
+            <input
+              disabled
+              type="text"
+              id="firstName"
+              name="firstName"
+              placeholder="Ex. P50,000"
+              className="mt-1 p-2 w-full border rounded-md"
+            />
             <h4 className="text-gray-600 mb-3 mt-3">ID Number</h4>
             <input
               disabled
@@ -138,11 +159,12 @@ export default function Settings() {
               placeholder="ID Number"
               className="mt-1 p-2 w-full border rounded-md"
             />
+
             <h4 className="text-gray-600 mb-3 mt-3">ID Scan</h4>
             <div className="flex items-center justify-center w-full">
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-white-700 hover:bg-gray-100 dark:border-gray-400 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-white-700 hover:bg-gray-300 dark:border-gray-300 dark:hover:border-gray-300 dark:hover:bg-gray-300 transition-all"
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <svg
@@ -169,8 +191,15 @@ export default function Settings() {
               </label>
             </div>
             <div className="w-full flex justify-center mt-5">
-              <button className="w-1/4 bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105">
-                Edit
+              <button
+                onClick={edit}
+                className={
+                  buttonState == "Edit"
+                    ? "w-1/4 bg-blue-500 hover:bg-blue-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                    : "w-1/4 bg-green-500 hover:bg-green-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                }
+              >
+                {buttonState}
               </button>
             </div>
           </div>
