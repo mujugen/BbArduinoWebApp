@@ -18,7 +18,7 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br bg-gray-200 flex flex-col">
-      <Navbar data={data} />
+      <Navbar data={data} active="default" />
       <div className="flex w-full h-full justify-center p-10 space-x-10">
         <div className="w-full max-w-2xl">
           <div
@@ -65,10 +65,10 @@ export default function Settings() {
           <div className="bg-white p-8 rounded-lg  w-full mb-5 flex flex-col">
             <h4 className="text-gray-600 mb-3 mt-3">Fingerprint</h4>
             <div className="flex">
-              <h3 className="text-lg mb-3">
+              <h3 className="text-lg mb-3 text-gray-400">
                 {data?.fingerprint ? data.fingerprint : "Unregistered"}
               </h3>
-              <button className="w-1/4 ml-auto bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-lg p-2 transition-transform transform hover:scale-105">
+              <button className="w-1/4 ml-auto bg-gray-300  focus:outline-none  text-white rounded-lg p-2 ">
                 Register
               </button>
             </div>

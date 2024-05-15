@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-500 flex flex-col">
-      <Navbar data={data} />
+      <Navbar data={data} active="home" />
       <div className="flex w-full h-full justify-center p-10 space-x-10">
         <div className="w-full max-w-2xl">
           <div className="bg-white p-8 rounded-lg  w-full mb-10 flex flex-col">
