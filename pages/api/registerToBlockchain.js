@@ -42,7 +42,6 @@ export default async function handler(req, res) {
       let tx = await storage2.setData(
         btoa(
           JSON.stringify({
-            email,
             address,
             city,
             province,

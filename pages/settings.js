@@ -54,41 +54,65 @@ export default function Settings() {
         console.log("Monthly Income:", monthly_incomeValue);
         console.log("ID Number:", id_numberValue);
         console.log("ID Scan:", id_scanValue);
+        console.log("Trying to save to blockchain");
+        saveToBlockchain(
+          addressValue,
+          cityValue,
+          provinceValue,
+          postal_codeValue,
+          ssnValue,
+          jobValue,
+          monthly_incomeValue,
+          id_numberValue,
+          id_scanValue
+        );
       };
       reader.onerror = function (error) {
         console.log("Error: ", error);
       };
-      console.log("Trying to save to blockchain");
-      // save to blockchain
-      try {
-        const response = await fetch("/api/registerToBlockchain", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: data.email,
-            address: addressValue,
-            city: cityValue,
-            province: provinceValue,
-            postal_code: postal_codeValue,
-            ssn: ssnValue,
-            job: jobValue,
-            monthly_income: monthly_incomeValue,
-            id_number: id_numberValue,
-            id_scan: id_scanValue,
-          }),
-        });
-        if (!response.ok) {
-          throw new Error("Something went wrong");
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-      } catch (error) {
-        console.error("Error:", error);
-      }
     } else {
       console.log("ID Scan: No file selected");
+    }
+  }
+  async function saveToBlockchain(
+    addressValue,
+    cityValue,
+    provinceValue,
+    postal_codeValue,
+    ssnValue,
+    jobValue,
+    monthly_incomeValue,
+    id_numberValue,
+    id_scanValue
+  ) {
+    // save to blockchain
+    try {
+      const response = await fetch("/api/registerToBlockchain", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+          address: addressValue,
+          city: cityValue,
+          province: provinceValue,
+          postal_code: postal_codeValue,
+          ssn: ssnValue,
+          job: jobValue,
+          monthly_income: monthly_incomeValue,
+          id_number: id_numberValue,
+          id_scan: id_scanValue,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+      const responseData = await response.json();
+      console.log(responseData);
+      setButtonState("Edit");
+    } catch (error) {
+      console.error("Error:", error);
     }
   }
   async function enrollRequest() {
@@ -119,6 +143,29 @@ export default function Settings() {
       setData(temp_data.response);
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+  }
+
+  async function retrieveData() {
+    console.log(data);
+    try {
+      const response = await fetch("/api/retrieveFromBlockchain", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+          blockchain_address: data.blockchain_address,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+      const responseData = await response.json();
+      console.log(JSON.parse(atob(responseData)));
+    } catch (error) {
+      console.error("Error:", error);
     }
   }
 
@@ -323,16 +370,16 @@ export default function Settings() {
               {buttonState == "Edit" ? (
                 <div className="w-full flex justify-center space-x-5">
                   <button
-                    disabled={data?.status == "Registered" ? false : true}
+                    disabled={data?.blockchain_address != null ? false : true}
                     onClick={() => {
-                      if (data?.status == "Registered") {
+                      if (data?.blockchain_address != null) {
                         retrieveData();
                       } else {
                         console.log("Not Registered");
                       }
                     }}
                     className={
-                      data?.status == "Registered"
+                      data?.blockchain_address != null
                         ? "w-1/4 bg-yellow-500 hover:bg-yellow-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
                         : "w-1/4 bg-gray-300  text-white rounded-lg p-2"
                     }
