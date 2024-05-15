@@ -8,11 +8,12 @@ datasource db {
 }
 
 model users {
-  id          Int       @id @default(autoincrement())
-  email       String    @unique
-  password    String    @db.VarChar(255)
-  first_name  String    @db.VarChar(50)
-  last_name   String    @db.VarChar(50)
-  birthday    DateTime? @db.Date
-  fingerprint String?   @db.Text
+  id                 Int       @id @default(autoincrement())
+  email              String?   @unique(map: "email") @db.VarChar(255)
+  password           String?   @db.VarChar(255)
+  first_name         String?   @db.VarChar(50)
+  last_name          String?   @db.VarChar(50)
+  birthday           DateTime? @db.Date
+  fingerprint        String?   @db.Text
+  blockchain_address String?   @db.VarChar(255)
 }

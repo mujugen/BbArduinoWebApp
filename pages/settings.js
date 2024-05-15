@@ -21,7 +21,7 @@ export default function Settings() {
     setButtonState((prevText) => (prevText === "Edit" ? "Save" : "Edit"));
   }
 
-  function saveEdit() {
+  async function saveEdit() {
     const addressValue = document.getElementById("address_field").value;
     const cityValue = document.getElementById("city_field").value;
     const provinceValue = document.getElementById("province_field").value;
@@ -58,6 +58,35 @@ export default function Settings() {
       reader.onerror = function (error) {
         console.log("Error: ", error);
       };
+      console.log("Trying to save to blockchain");
+      // save to blockchain
+      try {
+        const response = await fetch("/api/registerToBlockchain", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: data.email,
+            address: addressValue,
+            city: cityValue,
+            province: provinceValue,
+            postal_code: postal_codeValue,
+            ssn: ssnValue,
+            job: jobValue,
+            monthly_income: monthly_incomeValue,
+            id_number: id_numberValue,
+            id_scan: id_scanValue,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+      } catch (error) {
+        console.error("Error:", error);
+      }
     } else {
       console.log("ID Scan: No file selected");
     }
