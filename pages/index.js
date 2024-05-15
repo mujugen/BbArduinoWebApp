@@ -7,8 +7,9 @@ export default function Home() {
   const [currentUserId, setcurrentUserId] = useState(0);
   const [userFullname, setuserFullname] = useState("");
   const [userFingerprint, setuserFingerprint] = useState("");
-  const [arduinoState, setarduinoState] = useState("Waiting");
   const [modalToggle, setModalToggle] = useState(false);
+  const [modalTopText, setModalTopText] = useState("");
+  const [status, setStatus] = useState("");
   const router = useRouter();
 
   function createWebSocket() {
@@ -22,41 +23,8 @@ export default function Home() {
 
     socket.addEventListener("message", (event) => {
       console.log("Message from server: ", event.data);
-      setarduinoState(event.data);
+      setStatus(event.data);
     });
-  }
-
-  async function verifyRequest() {
-    createWebSocket();
-    const emailInput = document.getElementById("email");
-    const email = emailInput.value;
-
-    setarduinoState("Sending request");
-    console.log("verifyRequest");
-    if (currentUserId == 0) {
-      alert("Log in first");
-      return;
-    }
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/arduino/verifyAPI",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-      const data = await response.json();
-      console.log(data.data);
-      setarduinoState(data.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
   }
 
   async function login() {
@@ -93,17 +61,22 @@ export default function Home() {
     }
   }
 
+  const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
+
   async function fingerprintLogin() {
+    createWebSocket();
     setModalToggle(true);
     const emailInput = document.getElementById("email");
     const email = emailInput.value;
-
-    setarduinoState("Sending request");
-    console.log("verifyRequest");
-    if (currentUserId == 0) {
-      alert("Log in first");
-      return;
+    console.log(email);
+    if (email == "") {
+      setModalTopText("Please enter your email");
+    } else {
+      setModalTopText("Please put your thumb on the scanner");
     }
+
+    setStatus("Sending request");
+    console.log("verifyRequest");
     try {
       const response = await fetch(
         "http://localhost:3000/api/arduino/verifyAPI",
@@ -120,9 +93,50 @@ export default function Home() {
       }
       const data = await response.json();
       console.log(data.data);
-      setarduinoState(data.data);
+      setStatus(data.data);
+      if (data.data == "Fingerprint match") {
+        setModalTopText("Fingerprint match");
+        setStatus("Success");
+        await sleep(500);
+        // Log the values to the console
+        console.log("Email:", email);
+        console.log("Password:", password);
+
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/db/fingerprintLogin",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email }),
+            }
+          );
+          if (!response.ok) {
+            alert("Wrong credentials");
+            throw new Error("Something went wrong");
+          }
+          const data = await response.json();
+          router.push({
+            pathname: "/home",
+            query: { data: btoa(JSON.stringify(data.response)) },
+          });
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      } else {
+        setModalTopText("Fingerprint not matched, please try again");
+        await sleep(1000);
+        setModalToggle(false);
+        return;
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
+      setStatus("Failed, please retry");
+      await sleep(1000);
+      setModalToggle(false);
+      return;
     }
   }
 
@@ -384,7 +398,7 @@ export default function Home() {
             {/* Modal body */}
             <div className="p-10 md:p-5 space-y-2">
               <h4 className="text-2xl text-center font-semibold leading-relaxed text-gray-800 px-8">
-                Please put your thumb on the scanner
+                {modalTopText}
               </h4>
               <h5 className="text-lg text-center  leading-relaxed text-gray-500 px-8 pt-10">
                 Status:
