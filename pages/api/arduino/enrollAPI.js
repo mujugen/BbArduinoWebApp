@@ -6,12 +6,19 @@ const prisma = new PrismaClient();
 export default async function handler(req, res) {
   console.log("enrollAPI");
   const { email } = req.body;
+  console.log(email);
+  res.status(200).json({
+    data: "Success",
+    message: "Success",
+  });
   try {
-    const url = `http://${process.env.ARDUINO_IP}:80/api/enrollAPI`;
+    //const url = `http://${process.env.ARDUINO_IP}:80/api/enrollAPI`;
 
-    const response = await axios.get(url);
+    //const response = await axios.get(url);
 
-    const data = response.data;
+    //const data = response.data;
+
+    const data = "test fingerprint";
 
     const dbresponse = await prisma.users.update({
       where: {

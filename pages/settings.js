@@ -63,28 +63,31 @@ export default function Settings() {
     }
   }
   async function enrollRequest() {
-    createWebSocket();
-    const emailInput = document.getElementById("email");
-    const email = emailInput.value;
-
     console.log("enrollRequest");
-    if (currentUserId == 0) {
-      alert("Log in first");
-      return;
-    }
     try {
       const response = await fetch("/api/arduino/enrollAPI", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: data.email }),
       });
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
-      const data = await response.json();
-      console.log(data);
+      const responseData = await response.json();
+      console.log(responseData);
+
+      // refresh data
+      const response2 = await fetch("http://localhost:3000/api/db/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
+      const temp_data = await response2.json();
+      setData(temp_data.response);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -139,8 +142,14 @@ export default function Settings() {
           <div className="bg-white p-8 rounded-lg  w-full mb-5 flex flex-col">
             <h4 className="text-gray-600 mb-3 mt-3">Fingerprint</h4>
             <div className="flex">
-              <h3 className="text-lg mb-3 text-gray-400">
-                {data?.fingerprint ? data.fingerprint : "Unregistered"}
+              <h3
+                className={
+                  data?.fingerprint
+                    ? "text-lg mb-3 text-green-400"
+                    : "text-lg mb-3 text-gray-400"
+                }
+              >
+                {data?.fingerprint ? "Registered" : "Unregistered"}
               </h3>
               <button
                 className={
@@ -149,6 +158,7 @@ export default function Settings() {
                     : "ml-auto w-1/4 bg-blue-500 hover:bg-blue-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
                 }
                 disabled={buttonState == "Edit" ? true : false}
+                onClick={enrollRequest}
               >
                 Register
               </button>
@@ -284,16 +294,16 @@ export default function Settings() {
               {buttonState == "Edit" ? (
                 <div className="w-full flex justify-center space-x-5">
                   <button
-                    disabled={data?.fingerprint == "Registered" ? false : true}
+                    disabled={data?.status == "Registered" ? false : true}
                     onClick={() => {
-                      if (data?.fingerprint == "Registered") {
+                      if (data?.status == "Registered") {
                         retrieveData();
                       } else {
                         console.log("Not Registered");
                       }
                     }}
                     className={
-                      data?.fingerprint == "Registered"
+                      data?.status == "Registered"
                         ? "w-1/4 bg-yellow-500 hover:bg-yellow-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
                         : "w-1/4 bg-gray-300  text-white rounded-lg p-2"
                     }
