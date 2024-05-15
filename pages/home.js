@@ -59,7 +59,7 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <button
                   type="button"
-                  class="text-sm bg-blue-500 rounded-full w-fit"
+                  className="text-sm bg-blue-500 rounded-full w-fit"
                 >
                   <svg
                     className="w-16 h-16 fill-white"
@@ -79,7 +79,7 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <button
                   type="button"
-                  class="text-sm bg-blue-500 rounded-full w-fit"
+                  className="text-sm bg-blue-500 rounded-full w-fit"
                 >
                   <svg
                     className="w-16 h-16 fill-white"
@@ -99,7 +99,7 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <button
                   type="button"
-                  class="text-sm bg-blue-500 rounded-full w-fit"
+                  className="text-sm bg-blue-500 rounded-full w-fit"
                 >
                   <svg
                     className="w-16 h-16 fill-white"
