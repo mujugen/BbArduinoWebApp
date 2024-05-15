@@ -162,8 +162,30 @@ export default function Settings() {
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
-      const responseData = await response.json();
+      let responseData = await response.json();
       console.log(JSON.parse(atob(responseData)));
+      responseData = JSON.parse(atob(responseData));
+
+      // The fields for the document
+      const addressElement = document.getElementById("address_field");
+      const cityElement = document.getElementById("city_field");
+      const provinceElement = document.getElementById("province_field");
+      const postal_codeElement = document.getElementById("postal_code_field");
+      const ssnElement = document.getElementById("ssn_field");
+      const jobElement = document.getElementById("job_field");
+      const monthly_incomeElement = document.getElementById(
+        "monthly_income_field"
+      );
+      const id_numberElement = document.getElementById("id_number_field");
+
+      addressElement.value = responseData.address;
+      cityElement.value = responseData.city;
+      provinceElement.value = responseData.province;
+      postal_codeElement.value = responseData.postal_code;
+      ssnElement.value = responseData.ssn;
+      jobElement.value = responseData.job;
+      monthly_incomeElement.value = responseData.monthly_income;
+      id_numberElement.value = responseData.id_number;
     } catch (error) {
       console.error("Error:", error);
     }
