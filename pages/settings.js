@@ -6,6 +6,8 @@ import Navbar from "./components/navbar";
 export default function Settings() {
   const router = useRouter();
   const [data, setData] = useState(null);
+  const [file, setUploadedFile] = useState(null);
+  const [fileUploaded, setFileUploaded] = useState(false);
   const [buttonState, setButtonState] = useState("Edit");
 
   useEffect(() => {
@@ -15,8 +17,50 @@ export default function Settings() {
     }
   }, [router.query.data]);
 
-  function edit() {
+  function toggleEdit() {
     setButtonState((prevText) => (prevText === "Edit" ? "Save" : "Edit"));
+  }
+
+  function saveEdit() {
+    const addressValue = document.getElementById("address_field").value;
+    const cityValue = document.getElementById("city_field").value;
+    const provinceValue = document.getElementById("province_field").value;
+    const postal_codeValue = document.getElementById("postal_code_field").value;
+    const ssnValue = document.getElementById("ssn_field").value;
+    const jobValue = document.getElementById("job_field").value;
+    const monthly_incomeValue = document.getElementById(
+      "monthly_income_field"
+    ).value;
+    const id_numberValue = document.getElementById("id_number_field").value;
+    const id_scanInput = document.getElementById("id_scan_field");
+    let id_scanFile = null;
+    if (file) {
+      id_scanFile = file;
+    } else {
+      id_scanFile = id_scanInput.files[0];
+    }
+    let id_scanValue = "";
+    if (id_scanFile) {
+      var reader = new FileReader();
+      reader.readAsDataURL(id_scanFile);
+      reader.onload = function () {
+        id_scanValue = reader.result;
+        console.log("Address:", addressValue);
+        console.log("City:", cityValue);
+        console.log("Province:", provinceValue);
+        console.log("Postal Code:", postal_codeValue);
+        console.log("SSN:", ssnValue);
+        console.log("Job:", jobValue);
+        console.log("Monthly Income:", monthly_incomeValue);
+        console.log("ID Number:", id_numberValue);
+        console.log("ID Scan:", id_scanValue);
+      };
+      reader.onerror = function (error) {
+        console.log("Error: ", error);
+      };
+    } else {
+      console.log("ID Scan: No file selected");
+    }
   }
 
   return (
@@ -71,16 +115,22 @@ export default function Settings() {
               <h3 className="text-lg mb-3 text-gray-400">
                 {data?.fingerprint ? data.fingerprint : "Unregistered"}
               </h3>
-              <button className="w-1/4 ml-auto bg-gray-300  focus:outline-none  text-white rounded-lg p-2 ">
+              <button
+                className={
+                  buttonState == "Edit"
+                    ? "ml-auto  w-1/4 bg-gray-300  text-white rounded-lg p-2"
+                    : "ml-auto w-1/4 bg-blue-500 hover:bg-blue-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                }
+                disabled={buttonState == "Edit" ? true : false}
+              >
                 Register
               </button>
             </div>
             <h4 className="text-gray-600 mb-3 mt-3">Address</h4>
             <input
-              disabled
+              disabled={buttonState == "Edit" ? true : false}
               type="text"
-              id="firstName"
-              name="firstName"
+              id="address_field"
               placeholder="Enter your address"
               className="mt-1 p-2 w-full border rounded-md"
             />
@@ -88,10 +138,9 @@ export default function Settings() {
               <div>
                 <h4 className="text-gray-600 mb-3 mt-3">City</h4>
                 <input
-                  disabled
+                  disabled={buttonState == "Edit" ? true : false}
                   type="text"
-                  id="firstName"
-                  name="firstName"
+                  id="city_field"
                   placeholder="Enter your city"
                   className="mt-1 p-2 w-full border rounded-md"
                 />
@@ -99,10 +148,9 @@ export default function Settings() {
               <div>
                 <h4 className="text-gray-600 mb-3 mt-3">Province</h4>
                 <input
-                  disabled
+                  disabled={buttonState == "Edit" ? true : false}
                   type="text"
-                  id="firstName"
-                  name="firstName"
+                  id="province_field"
                   placeholder="Enter your province"
                   className="mt-1 p-2 w-full border rounded-md"
                 />
@@ -112,10 +160,9 @@ export default function Settings() {
               <div>
                 <h4 className="text-gray-600 mb-3 mt-3">Postal Code</h4>
                 <input
-                  disabled
+                  disabled={buttonState == "Edit" ? true : false}
                   type="text"
-                  id="firstName"
-                  name="firstName"
+                  id="postal_code_field"
                   placeholder="Ex: 1234"
                   className="mt-1 p-2 w-full border rounded-md"
                 />
@@ -123,10 +170,9 @@ export default function Settings() {
               <div>
                 <h4 className="text-gray-600 mb-3 mt-3">SSN</h4>
                 <input
-                  disabled
+                  disabled={buttonState == "Edit" ? true : false}
                   type="text"
-                  id="firstName"
-                  name="firstName"
+                  id="ssn_field"
                   placeholder="Ex: 1234"
                   className="mt-1 p-2 w-full border rounded-md"
                 />
@@ -134,28 +180,25 @@ export default function Settings() {
             </div>
             <h4 className="text-gray-600 mb-3 mt-3">Job</h4>
             <input
-              disabled
+              disabled={buttonState == "Edit" ? true : false}
               type="text"
-              id="firstName"
-              name="firstName"
+              id="job_field"
               placeholder="Ex. Accountant"
               className="mt-1 p-2 w-full border rounded-md"
             />
             <h4 className="text-gray-600 mb-3 mt-3">Monthly Income</h4>
             <input
-              disabled
+              disabled={buttonState == "Edit" ? true : false}
               type="text"
-              id="firstName"
-              name="firstName"
+              id="monthly_income_field"
               placeholder="Ex. P50,000"
               className="mt-1 p-2 w-full border rounded-md"
             />
             <h4 className="text-gray-600 mb-3 mt-3">ID Number</h4>
             <input
-              disabled
+              disabled={buttonState == "Edit" ? true : false}
               type="text"
-              id="firstName"
-              name="firstName"
+              id="id_number_field"
               placeholder="ID Number"
               className="mt-1 p-2 w-full border rounded-md"
             />
@@ -163,8 +206,20 @@ export default function Settings() {
             <h4 className="text-gray-600 mb-3 mt-3">ID Scan</h4>
             <div className="flex items-center justify-center w-full">
               <label
-                htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-white-700 hover:bg-gray-300 dark:border-gray-300 dark:hover:border-gray-300 dark:hover:bg-gray-300 transition-all"
+                htmlFor="id_scan_field"
+                className={
+                  file || fileUploaded
+                    ? "flex flex-col items-center justify-center w-full h-40 border-2 border-green-600 border-dashed rounded-lg cursor-pointer bg-green-100 dark:hover:bg-green-800 dark:bg-white-700 hover:bg-green-600 dark:border-green-600 dark:hover:border-green-600 dark:hover:bg-green-600 transition-all"
+                    : "flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-white-700 hover:bg-gray-300 dark:border-gray-300 dark:hover:border-gray-300 dark:hover:bg-gray-300 transition-all"
+                }
+                onDragOver={(e) => {
+                  e.preventDefault();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const file = e.dataTransfer.files[0];
+                  setUploadedFile(file);
+                }}
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <svg
@@ -187,20 +242,64 @@ export default function Settings() {
                     drag and drop
                   </p>
                 </div>
-                <input id="dropzone-file" type="file" className="hidden" />
+                <input
+                  id="id_scan_field"
+                  type="file"
+                  className="hidden"
+                  disabled={buttonState == "Edit" ? true : false}
+                  onChange={() => {
+                    setFileUploaded(true);
+                  }}
+                />
               </label>
             </div>
             <div className="w-full flex justify-center mt-5">
-              <button
-                onClick={edit}
-                className={
-                  buttonState == "Edit"
-                    ? "w-1/4 bg-blue-500 hover:bg-blue-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
-                    : "w-1/4 bg-green-500 hover:bg-green-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
-                }
-              >
-                {buttonState}
-              </button>
+              {buttonState == "Edit" ? (
+                <div className="w-full flex justify-center space-x-5">
+                  <button
+                    disabled={data?.fingerprint == "Registered" ? false : true}
+                    onClick={() => {
+                      if (data?.fingerprint == "Registered") {
+                        retrieveData();
+                      } else {
+                        console.log("Not Registered");
+                      }
+                    }}
+                    className={
+                      data?.fingerprint == "Registered"
+                        ? "w-1/4 bg-yellow-500 hover:bg-yellow-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                        : "w-1/4 bg-gray-300  text-white rounded-lg p-2"
+                    }
+                  >
+                    Retrieve Data
+                  </button>
+                  <button
+                    onClick={toggleEdit}
+                    className={
+                      buttonState == "Edit"
+                        ? "w-1/4 bg-blue-500 hover:bg-blue-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                        : "w-1/4 bg-green-500 hover:bg-green-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                    }
+                  >
+                    Edit
+                  </button>
+                </div>
+              ) : (
+                <div className="w-full flex justify-center space-x-5">
+                  <button
+                    onClick={saveEdit}
+                    className="w-1/4 bg-green-500 hover:bg-green-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={toggleEdit}
+                    className="w-1/4 bg-gray-500 hover:bg-gray-600 focus:outline-none  text-white rounded-lg p-2 transition-transform transform hover:scale-105"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
