@@ -25,36 +25,7 @@ export default function Home() {
     });
   }
 
-  async function enrollRequest() {
-    createWebSocket();
-    const emailInput = document.getElementById("email");
-    const email = emailInput.value;
-
-    console.log("enrollRequest");
-    if (currentUserId == 0) {
-      alert("Log in first");
-      return;
-    }
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/arduino/enrollAPI",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
+  
   async function verifyRequest() {
     createWebSocket();
     const emailInput = document.getElementById("email");
