@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Navbar from "./components/navbar";
 import Link from "next/link";
 
-export default function Home() {
+export default function Page() {
   const router = useRouter();
   const [data, setData] = useState(null);
   let counter = 0;
@@ -40,6 +40,10 @@ export default function Home() {
 
     fetchData();
   }, []);
+
+  function goToPage(page) {
+    router.push(page);
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-500 flex flex-col">
@@ -78,7 +82,12 @@ export default function Home() {
         <div className="w-full max-w-2xl">
           <div className="bg-white p-8 rounded-lg  w-full mb-5 flex flex-col">
             <div className="flex space-x-5">
-              <button className="text-xl font-bold w-1/2 bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-full p-4 transition-transform transform hover:scale-105">
+              <button
+                className="text-xl font-bold w-1/2 bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-full p-4 transition-transform transform hover:scale-105"
+                onClick={() => {
+                  goToPage("send");
+                }}
+              >
                 Send
               </button>
               <button className="text-xl font-bold w-1/2 bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-red-200 text-white rounded-full p-4 transition-transform transform hover:scale-105">

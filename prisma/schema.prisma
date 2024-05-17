@@ -19,3 +19,13 @@ model users {
   balance            Int?
   session_id         String?   @db.VarChar(50)
 }
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model transactions {
+  transaction_id       Int       @unique(map: "transaction_id") @default(autoincrement())
+  transaction_sender   String?   @db.VarChar(50)
+  transaction_receiver String?   @db.VarChar(50)
+  transaction_type     String?   @db.VarChar(50)
+  transaction_amount   Int?
+  transaction_datetime DateTime? @db.DateTime(0)
+}

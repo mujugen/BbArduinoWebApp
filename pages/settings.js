@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Navbar from "./components/navbar";
 
-export default function Settings() {
+export default function Page() {
   const router = useRouter();
   const [data, setData] = useState(null);
   const [file, setUploadedFile] = useState(null);

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-export default function Home() {
+export default function Page() {
   const [showRegisterForm, setShowRegisterForm] = useState(true);
   const [currentUserId, setcurrentUserId] = useState(0);
   const [userFullname, setuserFullname] = useState("");
