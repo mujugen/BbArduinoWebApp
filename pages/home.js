@@ -7,12 +7,16 @@ import Link from "next/link";
 export default function Page() {
   const router = useRouter();
   const [data, setData] = useState(null);
+  const [allUsers, setAllUsers] = useState([]);
   let counter = 0;
 
   useEffect(() => {
     async function fetchData() {
       if (counter === 0) {
         let session_id = localStorage.getItem("session_id");
+        if (session_id == null) {
+          router.push("/");
+        }
         console.log(session_id);
         counter += 1;
         try {
@@ -32,6 +36,7 @@ export default function Page() {
           const userData = await response.json();
           console.log(userData);
           setData(userData);
+          getUsers(userData);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -43,6 +48,29 @@ export default function Page() {
 
   function goToPage(page) {
     router.push(page);
+  }
+  async function getUsers(userData) {
+    const data = userData;
+    try {
+      const response = await fetch("http://localhost:3000/api/db/getUsers", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const users = await response.json();
+      console.log(users);
+      setAllUsers(users);
+
+      // remove current user from users
+      const index = users.findIndex((obj) => obj.id == data.id);
+
+      if (index !== -1) {
+        users.splice(index, 1);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
 
   return (
@@ -94,68 +122,34 @@ export default function Page() {
                 Request
               </button>
             </div>
-            <h4 className="text-xl font-bold my-10">Send again</h4>
-            <div className="flex space-x-10 flex-row">
-              <div className="flex flex-col items-center">
-                <button
-                  type="button"
-                  className="text-sm bg-blue-500 rounded-full w-fit"
+            <h4 className="text-xl font-bold my-10">Contacts</h4>
+            <div className="flex space-x-10 flex-row max-w-lg overflow-hidden">
+              {allUsers.map((user) => (
+                <div
+                  id={user.id}
+                  key={user.id}
+                  className="flex flex-col items-center"
                 >
-                  <svg
-                    className="w-16 h-16 fill-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -100 460 800"
+                  <button
+                    type="button"
+                    className="text-sm bg-blue-500 rounded-full w-fit"
                   >
-                    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
-                  </svg>
-                </button>
-                <h4
-                  className="text-center text-gray-500 mt-2"
-                  style={{ maxWidth: "4rem" }}
-                >
-                  John Watson
-                </h4>
-              </div>
-              <div className="flex flex-col items-center">
-                <button
-                  type="button"
-                  className="text-sm bg-blue-500 rounded-full w-fit"
-                >
-                  <svg
-                    className="w-16 h-16 fill-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -100 460 800"
+                    <svg
+                      className="w-16 h-16 fill-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 -100 460 800"
+                    >
+                      <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
+                    </svg>
+                  </button>
+                  <h4
+                    className="text-center text-gray-500 mt-2"
+                    style={{ maxWidth: "4rem" }}
                   >
-                    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
-                  </svg>
-                </button>
-                <h4
-                  className="text-center text-gray-500 mt-2"
-                  style={{ maxWidth: "4rem" }}
-                >
-                  John Watson
-                </h4>
-              </div>
-              <div className="flex flex-col items-center">
-                <button
-                  type="button"
-                  className="text-sm bg-blue-500 rounded-full w-fit"
-                >
-                  <svg
-                    className="w-16 h-16 fill-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -100 460 800"
-                  >
-                    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
-                  </svg>
-                </button>
-                <h4
-                  className="text-center text-gray-500 mt-2"
-                  style={{ maxWidth: "4rem" }}
-                >
-                  John Watson
-                </h4>
-              </div>
+                    {user.first_name} {user.last_name}
+                  </h4>
+                </div>
+              ))}
             </div>
           </div>
         </div>

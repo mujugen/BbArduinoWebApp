@@ -18,6 +18,9 @@ export default function Page() {
     async function fetchData() {
       if (counter === 0) {
         let session_id = localStorage.getItem("session_id");
+        if (session_id == null) {
+          router.push("/");
+        }
         console.log(session_id);
         counter += 1;
         try {

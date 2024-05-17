@@ -19,25 +19,27 @@ export default function Page() {
         let session_id = localStorage.getItem("session_id");
         console.log(session_id);
         counter += 1;
-        try {
-          const response = await fetch(
-            "http://localhost:3000/api/db/retrieveData",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ session_id }),
+        if (session_id != null) {
+          try {
+            const response = await fetch(
+              "http://localhost:3000/api/db/retrieveData",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ session_id }),
+              }
+            );
+            if (!response.ok) {
+              return;
             }
-          );
-          if (!response.ok) {
-            return;
+            const userData = await response.json();
+            console.log(userData);
+            router.push("/home");
+          } catch (error) {
+            console.error("Error fetching data:", error);
           }
-          const userData = await response.json();
-          console.log(userData);
-          router.push("/home");
-        } catch (error) {
-          console.error("Error fetching data:", error);
         }
       }
     }
