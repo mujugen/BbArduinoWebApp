@@ -79,6 +79,7 @@ export default function Settings() {
             value: new_balance,
           }),
         });
+        router.push("/home");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
