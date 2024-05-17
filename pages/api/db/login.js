@@ -15,10 +15,32 @@ export default async function handler(req, res) {
     if (!response) {
       res.status(500).json({ error: "Couldn't find user" });
     }
-    res.status(200).json({ response });
-    console.log(response);
+    const randomSessionId = makeid(10);
+    await prisma.users.update({
+      where: {
+        email: email,
+      },
+      data: {
+        session_id: randomSessionId,
+      },
+    });
+    res.status(200).json(randomSessionId );
+    console.log(randomSessionId);
   } catch (error) {
     console.error("Error fetching data:", error);
     res.status(500).json({ error: "Failed to fetch data" });
   }
+}
+
+function makeid(length) {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
 }

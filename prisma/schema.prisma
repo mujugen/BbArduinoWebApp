@@ -16,4 +16,6 @@ model users {
   birthday           DateTime? @db.Date
   fingerprint        String?   @db.Text
   blockchain_address String?   @db.VarChar(255)
+  balance            Int?
+  session_id         String?   @db.VarChar(50)
 }

@@ -25,3 +25,39 @@ body {
 .font-blue {
   color: rgb(0 33 79);
 }
+
+select::-ms-expand {
+  display: none;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 1rem top 50%;
+  font-size: 1.2rem !important;
+}
+
+option {
+  font-size: 1.2rem;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.width-fill {
+  width: -webkit-fill-available;
+}
+
+input[type="radio"]:checked + label {
+  background-color: #e0e0e0;
+}
+
+input[type="radio"] + label {
+  user-select: none;
+}

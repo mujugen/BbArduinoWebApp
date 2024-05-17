@@ -5,10 +5,7 @@ export default function Navbar({ data, active }) {
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center mx-auto p-4">
         <Link
-          href={{
-            pathname: "/home",
-            query: { data: btoa(JSON.stringify(data)) },
-          }}
+          href="/home"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white ibm-plex-serif-medium">
@@ -52,10 +49,7 @@ export default function Navbar({ data, active }) {
             <ul className="py-2" aria-labelledby="user-menu-button">
               <li>
                 <Link
-                  href={{
-                    pathname: "/settings",
-                    query: { data: btoa(JSON.stringify(data)) },
-                  }}
+                  href="/settings"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Settings
@@ -80,10 +74,7 @@ export default function Navbar({ data, active }) {
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
               <Link
-                href={{
-                  pathname: "/home",
-                  query: { data: btoa(JSON.stringify(data)) },
-                }}
+                href="/home"
                 className={
                   active == "home"
                     ? "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"

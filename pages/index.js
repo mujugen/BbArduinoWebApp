@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 export default function Home() {
@@ -11,6 +11,39 @@ export default function Home() {
   const [modalTopText, setModalTopText] = useState("");
   const [status, setStatus] = useState("");
   const router = useRouter();
+  let counter = 0;
+
+  useEffect(() => {
+    async function fetchData() {
+      if (counter === 0) {
+        let session_id = localStorage.getItem("session_id");
+        console.log(session_id);
+        counter += 1;
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/db/retrieveData",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ session_id }),
+            }
+          );
+          if (!response.ok) {
+            return;
+          }
+          const userData = await response.json();
+          console.log(userData);
+          router.push("/home");
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    }
+
+    fetchData();
+  }, []);
 
   function createWebSocket() {
     const socket = new WebSocket(
@@ -51,11 +84,10 @@ export default function Home() {
         alert("Wrong credentials");
         throw new Error("Something went wrong");
       }
-      const data = await response.json();
-      router.push({
-        pathname: "/home",
-        query: { data: btoa(JSON.stringify(data.response)) },
-      });
+      const session_id = await response.json();
+      console.log(session_id);
+      localStorage.setItem("session_id", session_id);
+      router.push("/home");
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -117,11 +149,10 @@ export default function Home() {
             alert("Wrong credentials");
             throw new Error("Something went wrong");
           }
-          const data = await response.json();
-          router.push({
-            pathname: "/home",
-            query: { data: btoa(JSON.stringify(data.response)) },
-          });
+          const session_id = await response.json();
+          console.log(session_id);
+          localStorage.setItem("session_id", session_id);
+          router.push("/home");
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -197,7 +228,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-500 flex flex-col">
       <div className="flex bg-white p-8 w-1/2 h-full fixed items-center justify-center">
-        <div className="bg-white p-8 rounded-lg  w-3/5 mb-5 flex flex-col">
+        <div className="bg-white p-8 rounded-lg  w-3/5 mb-5 flex flex-col max-w-xl">
           {showRegisterForm ? (
             <>
               <div className="mb-4">

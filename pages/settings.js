@@ -9,13 +9,39 @@ export default function Settings() {
   const [file, setUploadedFile] = useState(null);
   const [fileUploaded, setFileUploaded] = useState(false);
   const [buttonState, setButtonState] = useState("Edit");
+  let counter = 0;
 
   useEffect(() => {
-    if (router.query.data) {
-      setData(JSON.parse(atob(router.query.data)));
-      console.log(JSON.parse(atob(router.query.data)));
+    async function fetchData() {
+      if (counter === 0) {
+        let session_id = localStorage.getItem("session_id");
+        console.log(session_id);
+        counter += 1;
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/db/retrieveData",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ session_id }),
+            }
+          );
+          if (!response.ok) {
+            router.push("/");
+          }
+          const userData = await response.json();
+          console.log(userData);
+          setData(userData);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
     }
-  }, [router.query.data]);
+
+    fetchData();
+  }, []);
 
   function toggleEdit() {
     setButtonState((prevText) => (prevText === "Edit" ? "Save" : "Edit"));
