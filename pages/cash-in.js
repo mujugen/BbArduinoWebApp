@@ -88,7 +88,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br bg-gray-200 flex flex-col">
-      <Navbar data={data} active="default" />
+      <Navbar data={data} active="cash-in" />
       <div className="flex w-full h-full justify-center p-10 space-x-10">
         <div className="w-full max-w-2xl">
           <h3 className="text-3xl font-semibold mb-5">Cash In</h3>

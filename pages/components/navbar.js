@@ -89,7 +89,19 @@ export default function Navbar({ data, active }) {
               </Link>
             </li>
             <li>
-              <a
+              <Link
+                href="/cash-in"
+                className={
+                  active == "cash-in"
+                    ? "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+                    : "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                }
+              >
+                Cash In
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/send"
                 className={
                   active == "send"
@@ -98,55 +110,7 @@ export default function Navbar({ data, active }) {
                 }
               >
                 Send
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={
-                  active == "receive"
-                    ? "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-                    : "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                }
-              >
-                Receive
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={
-                  active == "wallet"
-                    ? "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-                    : "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                }
-              >
-                Wallet
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={
-                  active == "activity"
-                    ? "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-                    : "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                }
-              >
-                Activity
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={
-                  active == "help"
-                    ? "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-                    : "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                }
-              >
-                Help
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

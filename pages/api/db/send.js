@@ -44,6 +44,8 @@ export default async function handler(req, res) {
         transaction_type: "Send",
         transaction_amount: parseInt(amount),
         transaction_datetime: new Date(),
+        transaction_receiver_name: `${receiver.first_name} ${receiver.last_name}`,
+        transaction_sender_name: `${sender.first_name} ${sender.last_name}`,
       },
     });
     res.status(200).json({ message: "Success" });
