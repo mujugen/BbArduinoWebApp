@@ -138,6 +138,8 @@ export default function Page() {
                         <h4 className="text-xl font-bold">
                           {data.id == transaction.transaction_sender
                             ? "Send"
+                            : transaction.transaction_type == "Cash-In"
+                            ? "Cash-In"
                             : "Receive"}
                         </h4>
                         <h6 className="text-md text-gray-600">

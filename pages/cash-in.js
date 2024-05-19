@@ -8,6 +8,7 @@ export default function Page() {
   const [data, setData] = useState(null);
   const [selectedRadio, setSelectedRadio] = useState(null);
   const [cashInValue, setCashInValue] = useState(0);
+  const [selectedBank, setSelectedBank] = useState(null);
   let counter = 0;
   useEffect(() => {
     async function fetchData() {
@@ -56,27 +57,22 @@ export default function Page() {
     const amountFieldElement = document.getElementById("amountField");
     setCashInValue(amountFieldElement.value);
     console.log(amountFieldElement.value);
-    if (amountFieldElement != "" || amountFieldElement != null) {
-      let new_balance = 0;
-      if (data.balance == null) {
-        new_balance = amountFieldElement.value;
-      } else {
-        new_balance =
-          parseInt(data.balance) + parseInt(amountFieldElement.value);
-      }
-      data.balance = new_balance;
-      console.log(data.balance);
-
+    console.log(selectedBank);
+    if (
+      amountFieldElement != "" ||
+      amountFieldElement != null ||
+      selectedBank != null
+    ) {
       try {
-        const response = await fetch("http://localhost:3000/api/db/update", {
+        const response = await fetch("http://localhost:3000/api/db/cash-in", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: data.email,
-            column: "balance",
-            value: new_balance,
+            bank_name: selectedBank,
+            user_id: data.id,
+            amount: amountFieldElement.value,
           }),
         });
         router.push("/home");
@@ -96,9 +92,16 @@ export default function Page() {
             <h3 className="text-xl font-semibold mb-3">Select Bank</h3>
             <form className="w-full">
               <select
-                id="countries"
+                id="sendUser"
                 className="appearance-none w-full text-gray-700 border py-4 pl-10 pr-4 border-gray-300 bg-white hover:bg-white-800 font-medium rounded-lg text-lg"
+                value={selectedBank || ""}
+                onChange={(event) => {
+                  const value =
+                    event.target.value === "" ? null : event.target.value;
+                  setSelectedBank(value);
+                }}
               >
+                <option>Select a bank</option>
                 <option>Bank 1</option>
                 <option>Bank 2</option>
               </select>
